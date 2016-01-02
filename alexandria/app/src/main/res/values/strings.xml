@@ -35,5 +35,6 @@
     <string name="no_network_dialog_title">Internet Needed to Add a Book</string>
     <string name="empty_list_server_down">No book information available. The server is not returning data.</string>
     <string name="empty_list_server_error">No book information available. The server is not returning valid data. Please check for an updated version.</string>
+    <string name="scan_success">Successfully scanned barcode.</string>
 
 </resources>

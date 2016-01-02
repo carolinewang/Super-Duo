@@ -30,9 +30,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-
-
+        <activity android:name=".BarCodeScanner"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <provider
             android:name=".data.BookProvider"
             android:authorities="it.jaschke.alexandria"

@@ -1,11 +1,16 @@
 package barqsoft.footballscores.service;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -24,7 +29,10 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 import barqsoft.footballscores.DatabaseContract;
+import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.widget.WidgetIntentService;
+import barqsoft.footballscores.widget.WidgetProvider;
 
 /**
  * Created by yehya khaled on 3/2/2015.
@@ -40,10 +48,9 @@ public class myFetchService extends IntentService
     @Override
     protected void onHandleIntent(Intent intent)
     {
+
         getData("n2");
         getData("p2");
-
-        return;
     }
 
     private void getData (String timeFrame)
@@ -269,12 +276,21 @@ public class myFetchService extends IntentService
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
 
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
+            updateWidgets();
         }
         catch (JSONException e)
         {
             Log.e(LOG_TAG,e.getMessage());
         }
 
+    }
+    private void updateWidgets() {
+
+        Context context = getApplicationContext();
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(WidgetIntentService.ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 }
 

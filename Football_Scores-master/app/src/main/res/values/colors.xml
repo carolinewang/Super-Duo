@@ -76,5 +76,6 @@
     <color name="red13">#FFCACA</color>
     <color name="red14">#FFE4E4</color>
 
-
+    <color name="activated">#E0E0E0</color>
+    <color name="white">#FFFFFF</color>
 </resources>
