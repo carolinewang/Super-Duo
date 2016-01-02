@@ -23,14 +23,13 @@
                 android:layout_gravity="center"
                 android:id="@+id/home_crest"
                 android:contentDescription="@string/accessibility_home_crest"
-                android:src="@drawable/manchester_united"/>
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="@dimen/TeamNames"
                 android:gravity="center"
-                android:text="Manchester"
                 android:id="@+id/home_name"/>
         </LinearLayout>
         <LinearLayout
@@ -43,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="2"
-                android:text="1-0"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textSize="@dimen/Score"
@@ -52,7 +50,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="10:00"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:id="@+id/time_textview"/>
@@ -67,16 +64,32 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:id="@+id/away_crest"
-                android:contentDescription="@string/accessibility_away_crest"
-                android:src="@drawable/chelsea"/>
+                android:contentDescription="@string/accessibility_away_crest" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Chelsea"
                 android:textSize="@dimen/TeamNames"
-                android:id="@+id/away_name"/>
+                android:id="@+id/away_name" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/no_match"
+        android:id="@+id/no_score"
+        android:gravity="center"
+        />
     </LinearLayout>
 </FrameLayout>

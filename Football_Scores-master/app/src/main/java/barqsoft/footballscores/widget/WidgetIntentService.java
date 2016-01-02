@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -69,6 +70,11 @@ public class WidgetIntentService extends IntentService {
         Cursor cursor = getContentResolver().query(scoreWithDateUri, SCORE_COLUMNS, null,
                 dates, DatabaseContract.scores_table.TIME_COL + " DESC");
         if (cursor == null) {
+//            for (int appWidgetId : appWidgetIds) {
+//                RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget);
+//                views.setViewVisibility(R.id.no_score, View.VISIBLE);
+//                views.setViewVisibility(R.id.widget_layout, View.INVISIBLE);
+//            }
             return;
         }
         if (!cursor.moveToFirst()) {
@@ -88,6 +94,7 @@ public class WidgetIntentService extends IntentService {
 
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget);
+            views.setViewVisibility(R.id.no_score, View.INVISIBLE);
 
             // Add the data to the RemoteViews
             //display team icons

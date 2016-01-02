@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.text.LoginFilter;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -127,8 +128,10 @@ public class myFetchService extends IntentService
                     return;
                 }
 
-
                 processJSONdata(JSON_data, getApplicationContext(), true);
+                Log.d(LOG_TAG,"JSON fetched: " + JSON_data);
+                updateWidgets();
+
             } else {
                 //Could not Connect
                 Log.d(LOG_TAG, "Could not connect to server.");
@@ -258,13 +261,13 @@ public class myFetchService extends IntentService
                     match_values.put(DatabaseContract.scores_table.MATCH_DAY,match_day);
                     //log spam
 
-                    //Log.v(LOG_TAG,match_id);
-                    //Log.v(LOG_TAG,mDate);
-                    //Log.v(LOG_TAG,mTime);
-                    //Log.v(LOG_TAG,Home);
-                    //Log.v(LOG_TAG,Away);
-                    //Log.v(LOG_TAG,Home_goals);
-                    //Log.v(LOG_TAG,Away_goals);
+                    Log.d(LOG_TAG,match_id);
+                    Log.d(LOG_TAG,mDate);
+                    Log.d(LOG_TAG,mTime);
+                    Log.d(LOG_TAG,Home);
+                    Log.d(LOG_TAG,Away);
+                    Log.d(LOG_TAG,Home_goals);
+                    Log.d(LOG_TAG,Away_goals);
 
                     values.add(match_values);
                 }
@@ -276,11 +279,11 @@ public class myFetchService extends IntentService
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
 
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
-            updateWidgets();
         }
         catch (JSONException e)
         {
             Log.e(LOG_TAG,e.getMessage());
+            Toast.makeText(getApplicationContext(),R.string.server_down,Toast.LENGTH_SHORT).show();
         }
 
     }
