@@ -262,12 +262,12 @@ public class myFetchService extends IntentService
                     //log spam
 
                     Log.d(LOG_TAG,match_id);
-                    Log.d(LOG_TAG,mDate);
-                    Log.d(LOG_TAG,mTime);
-                    Log.d(LOG_TAG,Home);
-                    Log.d(LOG_TAG,Away);
-                    Log.d(LOG_TAG,Home_goals);
-                    Log.d(LOG_TAG,Away_goals);
+                    Log.d(LOG_TAG,"mDate" + mDate);
+                    Log.d(LOG_TAG,"mTime" + mTime);
+                    Log.d(LOG_TAG,"Home" + Home);
+                    Log.d(LOG_TAG,"Away" + Away);
+                    Log.d(LOG_TAG,"home goals" + Home_goals);
+                    Log.d(LOG_TAG,"away goals" + Away_goals);
 
                     values.add(match_values);
                 }

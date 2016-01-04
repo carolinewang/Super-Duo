@@ -24,9 +24,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import barqsoft.footballscores.DatabaseContract;
@@ -39,7 +41,7 @@ import barqsoft.footballscores.scoresAdapter;
  * IntentService which handles updating all Today widgets with the latest data
  */
 public class WidgetIntentService extends IntentService {
-
+    public static final String LOG_TAG = "WidgetIntentService";
     public static final String ACTION_DATA_UPDATED = "barqsoft.footballscores.ACTION_DATA_UPDATED";
     private static final String[] SCORE_COLUMNS = {
             DatabaseContract.scores_table.HOME_COL,
@@ -48,14 +50,27 @@ public class WidgetIntentService extends IntentService {
             DatabaseContract.scores_table.AWAY_GOALS_COL,
             DatabaseContract.scores_table.MATCH_DAY,
             DatabaseContract.scores_table.MATCH_ID,
+            DatabaseContract.scores_table.DATE_COL,
             DatabaseContract.scores_table.TIME_COL,
     };
+    // these indices must match the projection
+    private static final int INDEX_HOME_COL = 0;
+    private static final int INDEX_AWAY_COL = 1;
+    private static final int INDEX_HOME_GOALS_COL = 2;
+    private static final int INDEX_AWAY_GOALS_COL = 3;
+    private static final int INDEX_MATCH_DAY = 4;
+    private static final int INDEX_MATCH_ID = 5;
+    private static final int INDEX_DATE_COL = 6;
+    private static final int INDEX_TIME_COL = 7;
+
+    public Cursor cursor;
     public WidgetIntentService() {
         super("WidgetIntentService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(LOG_TAG,"inside onHandleIntent");
 
         // Retrieve all of the Today widget ids: these are the widgets we need to update
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
@@ -64,11 +79,14 @@ public class WidgetIntentService extends IntentService {
 
         // Get today's data from the ContentProvider
         Uri scoreWithDateUri = DatabaseContract.scores_table.buildScoreWithDate();
-        String date = Long.toString(System.currentTimeMillis());
-        String[] dates = {date};
+        SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+        String formateDate = mformat.format(System.currentTimeMillis());
+        String[] dates = {formateDate};
+//        String[] dates = {"2016-01-03"};
 
-        Cursor cursor = getContentResolver().query(scoreWithDateUri, SCORE_COLUMNS, null,
-                dates, DatabaseContract.scores_table.TIME_COL + " DESC");
+        cursor = getContentResolver().query(scoreWithDateUri, SCORE_COLUMNS, null,
+                dates, DatabaseContract.scores_table.DATE_COL + " ASC");
+        Log.d (LOG_TAG,"cursor"+ cursor);
         if (cursor == null) {
 //            for (int appWidgetId : appWidgetIds) {
 //                RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget);
@@ -82,19 +100,25 @@ public class WidgetIntentService extends IntentService {
             return;
         }
         // Extract the data from the Cursor
-        int scoreID = cursor.getInt(scoresAdapter.COL_ID);
-        String homeName = cursor.getString(scoresAdapter.COL_HOME);
-        String awayName = cursor.getString(scoresAdapter.COL_AWAY);
+        int scoreID = cursor.getInt(INDEX_MATCH_ID);
+        String homeName = cursor.getString(INDEX_HOME_COL);
+        String awayName = cursor.getString(INDEX_AWAY_COL);
         int homeCrest = Utility.getTeamCrestByTeamName(homeName);
         int awayCrest = Utility.getTeamCrestByTeamName(awayName);
-        int homeScore = cursor.getInt(scoresAdapter.COL_HOME_GOALS);
-        int awayScore = cursor.getInt(scoresAdapter.COL_AWAY_GOALS);
-        String time = cursor.getString(scoresAdapter.COL_MATCHTIME);
+        int homeScore = cursor.getInt(INDEX_HOME_GOALS_COL);
+        int awayScore = cursor.getInt(INDEX_AWAY_GOALS_COL);
+        String time = cursor.getString(INDEX_TIME_COL);
+        Log.d(LOG_TAG, "cursor.homeName" + homeName);
+        Log.d(LOG_TAG, "cursor.awayName" + awayName);
+        Log.d(LOG_TAG, "cursor.homeScore" + homeScore);
+        Log.d(LOG_TAG, "cursor.awayScore" + awayScore);
+        Log.d(LOG_TAG, "cursor.time" + time);
         cursor.close();
 
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget);
             views.setViewVisibility(R.id.no_score, View.INVISIBLE);
+            views.setViewVisibility(R.id.app_icon, View.INVISIBLE);
 
             // Add the data to the RemoteViews
             //display team icons
@@ -102,7 +126,7 @@ public class WidgetIntentService extends IntentService {
             views.setImageViewResource(R.id.away_crest, awayCrest);
             //display team names
             views.setTextViewText(R.id.home_name,homeName);
-            views.setTextViewText(R.id.home_name,awayName);
+            views.setTextViewText(R.id.away_name,awayName);
             //display scores and time
             views.setTextViewText(R.id.score_textview,Utility.getScores(homeScore,awayScore));
             views.setTextViewText(R.id.time_textview,time);
